@@ -2,7 +2,6 @@ import AILabInterpretationSection from "@/components/AILabInterpretationSection"
 import AccessibilityWidget from "@/components/AccessibilityWidget";
 import { LanguageProvider, useLang } from "@/i18n/LanguageContext";
 import type { Lang } from "@/i18n/translations";
-import translations from "@/i18n/translations";
 import insulaLogo from "@/assets/insula-logo-hero.png";
 
 const LANGS: { code: Lang; label: string }[] = [
@@ -19,9 +18,9 @@ const TopBar = () => {
         <div className="flex items-center gap-2">
           <img src={insulaLogo} alt="Insula" className="w-7 h-7 rounded-full object-cover" />
           <div className="flex flex-col leading-none">
-            <span className="font-heading font-bold text-foreground lowercase">insula</span>
+            <span className="font-heading font-bold text-foreground lowercase">Heratsi</span>
             <span className="text-[8px] font-medium text-muted-foreground tracking-widest uppercase">
-              endocrinology clinic
+              AI Lab
             </span>
           </div>
         </div>
@@ -45,17 +44,6 @@ const TopBar = () => {
   );
 };
 
-const MiniFooter = () => {
-  const { lang } = useLang();
-  return (
-    <footer className="border-t border-border py-6">
-      <div className="container text-center text-sm text-muted-foreground">
-        &copy; {new Date().getFullYear()} Insula. {translations.footer.rights[lang]}
-      </div>
-    </footer>
-  );
-};
-
 const AILab = () => (
   <LanguageProvider>
     <div className="min-h-screen bg-background flex flex-col">
@@ -63,7 +51,6 @@ const AILab = () => (
       <main className="flex-1 py-10">
         <AILabInterpretationSection />
       </main>
-      <MiniFooter />
       <AccessibilityWidget />
     </div>
   </LanguageProvider>
