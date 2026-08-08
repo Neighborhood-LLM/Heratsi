@@ -1,4 +1,4 @@
-# Insula AI Lab (standalone, fully local)
+# Heratsi by Yos and Melk
 
 Upload a lab report (PDF/JPG/PNG), get an AI-assisted structured interpretation, and
 chat with the AI about any marker via the "?" button. Multilingual (EN / RU / HY) with
