@@ -26,3 +26,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Eval harness run output (fixtures/lib are source, this is generated)
+/eval/results/

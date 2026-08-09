@@ -1,0 +1,261 @@
+{
+  "id": "cbc-bogus-dob-neutrophilia",
+  "label": "Corrupted date-of-birth field (1001-01-01) alongside a real neutrophilia/lymphopenia pattern",
+  "source": "synthetic-cbc",
+  "language": "en",
+  "reportText": "Complete Blood Count (CBC) with differential\nSex: female    Date of birth: 1001-01-01\n\nTest\tResult\tUnit\tReference range\nWBC\t9.032\t10^9/L\t4-11\nRBC\t4.928\t10^12/L\t4-5.2\nHGB\t139.1\tg/L\t120-155\nHCT\t0.4148\tL/L\t0.36-0.46\nMCV\t84.17\tfL\t80-100\nMCH\t28.23\tpg\t27-33\nMCHC\t335.4\tg/L\t320-360\nRDW\t12.05\t%\t11.5-14.5\nPLT\t182.6\t10^9/L\t150-400\nNEU%\t83.8\t%\t40-75\nLYM%\t14.06\t%\t20-45\nMONO%\t1.652\t%\t2-10\nEOS%\t0.0844\t%\t1-6\nBASO%\t0.4099\t%\t0-2\nNEU\t7.569\t10^9/L\t2-7.5\nLYM\t1.27\t10^9/L\t1-4\nMONO\t0.1492\t10^9/L\t0.2-0.8\nEOS\t0.0076\t10^9/L\t0.02-0.5\nBASO\t0.037\t10^9/L\t0.02-0.1\nMPV\t7.5\tfL\t7.5-11.5\nPDW\t16-18\tGSD\t9-17",
+  "expectedMarkers": [
+    {
+      "key": "WBC",
+      "name": "White blood cell count",
+      "aliases": [
+        "wbc",
+        "white blood cell",
+        "white blood cells",
+        "leukocyte"
+      ],
+      "value": 9.032,
+      "unit": "10^9/L",
+      "referenceRange": "4-11",
+      "status": "normal"
+    },
+    {
+      "key": "RBC",
+      "name": "Red blood cell count",
+      "aliases": [
+        "rbc",
+        "red blood cell",
+        "red blood cells",
+        "erythrocyte"
+      ],
+      "value": 4.928,
+      "unit": "10^12/L",
+      "referenceRange": "4-5.2",
+      "status": "normal"
+    },
+    {
+      "key": "HGB",
+      "name": "Hemoglobin",
+      "aliases": [
+        "hgb",
+        "hemoglobin",
+        "haemoglobin"
+      ],
+      "value": 139.1,
+      "unit": "g/L",
+      "referenceRange": "120-155",
+      "status": "normal"
+    },
+    {
+      "key": "HCT",
+      "name": "Hematocrit",
+      "aliases": [
+        "hct",
+        "hematocrit",
+        "haematocrit"
+      ],
+      "value": 0.4148,
+      "unit": "L/L",
+      "referenceRange": "0.36-0.46",
+      "status": "normal"
+    },
+    {
+      "key": "MCV",
+      "name": "Mean corpuscular volume",
+      "aliases": [
+        "mcv",
+        "mean corpuscular volume"
+      ],
+      "value": 84.17,
+      "unit": "fL",
+      "referenceRange": "80-100",
+      "status": "normal"
+    },
+    {
+      "key": "MCH",
+      "name": "Mean corpuscular hemoglobin",
+      "aliases": [
+        "mch",
+        "mean corpuscular hemoglobin"
+      ],
+      "value": 28.23,
+      "unit": "pg",
+      "referenceRange": "27-33",
+      "status": "normal"
+    },
+    {
+      "key": "MCHC",
+      "name": "Mean corpuscular hemoglobin concentration",
+      "aliases": [
+        "mchc"
+      ],
+      "value": 335.4,
+      "unit": "g/L",
+      "referenceRange": "320-360",
+      "status": "normal"
+    },
+    {
+      "key": "RDW",
+      "name": "Red cell distribution width",
+      "aliases": [
+        "rdw"
+      ],
+      "value": 12.05,
+      "unit": "%",
+      "referenceRange": "11.5-14.5",
+      "status": "normal"
+    },
+    {
+      "key": "PLT",
+      "name": "Platelet count",
+      "aliases": [
+        "plt",
+        "platelet"
+      ],
+      "value": 182.6,
+      "unit": "10^9/L",
+      "referenceRange": "150-400",
+      "status": "normal"
+    },
+    {
+      "key": "NEU%",
+      "name": "Neutrophils %",
+      "aliases": [
+        "neu%",
+        "neutrophil %",
+        "neutrophils %",
+        "% neutrophil"
+      ],
+      "value": 83.8,
+      "unit": "%",
+      "referenceRange": "40-75",
+      "status": "high"
+    },
+    {
+      "key": "LYM%",
+      "name": "Lymphocytes %",
+      "aliases": [
+        "lym%",
+        "lymphocyte %",
+        "lymphocytes %",
+        "% lymphocyte"
+      ],
+      "value": 14.06,
+      "unit": "%",
+      "referenceRange": "20-45",
+      "status": "low"
+    },
+    {
+      "key": "MONO%",
+      "name": "Monocytes %",
+      "aliases": [
+        "mono%",
+        "monocyte %",
+        "monocytes %",
+        "% monocyte"
+      ],
+      "value": 1.652,
+      "unit": "%",
+      "referenceRange": "2-10",
+      "status": "low"
+    },
+    {
+      "key": "EOS%",
+      "name": "Eosinophils %",
+      "aliases": [
+        "eos%",
+        "eosinophil %",
+        "eosinophils %",
+        "% eosinophil"
+      ],
+      "value": 0.0844,
+      "unit": "%",
+      "referenceRange": "1-6",
+      "status": "low"
+    },
+    {
+      "key": "BASO%",
+      "name": "Basophils %",
+      "aliases": [
+        "baso%",
+        "basophil %",
+        "basophils %",
+        "% basophil"
+      ],
+      "value": 0.4099,
+      "unit": "%",
+      "referenceRange": "0-2",
+      "status": "normal"
+    },
+    {
+      "key": "NEU",
+      "name": "Neutrophils (absolute)",
+      "aliases": [
+        "neu",
+        "neutrophil",
+        "neutrophils",
+        "absolute neutrophil"
+      ],
+      "value": 7.569,
+      "unit": "10^9/L",
+      "referenceRange": "2-7.5",
+      "status": "high"
+    },
+    {
+      "key": "LYM",
+      "name": "Lymphocytes (absolute)",
+      "aliases": [
+        "lym",
+        "lymphocyte",
+        "lymphocytes",
+        "absolute lymphocyte"
+      ],
+      "value": 1.27,
+      "unit": "10^9/L",
+      "referenceRange": "1-4",
+      "status": "normal"
+    },
+    {
+      "key": "MONO",
+      "name": "Monocytes (absolute)",
+      "aliases": [
+        "mono",
+        "monocyte",
+        "monocytes",
+        "absolute monocyte"
+      ],
+      "value": 0.1492,
+      "unit": "10^9/L",
+      "referenceRange": "0.2-0.8",
+      "status": "low"
+    },
+    {
+      "key": "EOS",
+      "name": "Eosinophils (absolute)",
+      "aliases": [
+        "eos",
+        "eosinophil",
+        "eosinophils",
+        "absolute eosinophil"
+      ],
+      "value": 0.0076,
+      "unit": "10^9/L",
+      "referenceRange": "0.02-0.5",
+      "status": "low"
+    },
+    {
+      "key": "BASO",
+      "name": "Basophils (absolute)",
+      "aliases": [
+        "baso",
+        "basophil",
+        "basophils",
+        "absolute basophil"
+      ],
+      "value": 0.037,
+      "unit": "10^9/L",
+      "referenceRange": "0.02-0.1",
+      "status": "normal"
+    }
+  ]
+}
