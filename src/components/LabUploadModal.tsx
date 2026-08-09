@@ -1,12 +1,10 @@
 import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Upload, FileText, Loader2, Check, TrendingUp, TrendingDown, AlertTriangle, Sparkles, Brain, X, Image as ImageIcon, FileText as FileIcon, HeartPulse, GraduationCap, ArrowRight, Stethoscope } from "lucide-react";
+import { Upload, FileText, Loader2, Check, TrendingUp, TrendingDown, AlertTriangle, Sparkles, Brain, X, Image as ImageIcon, FileText as FileIcon, GraduationCap, ArrowRight } from "lucide-react";
 import InsulinTrainingModal from "./InsulinTrainingModal";
 import MarkerChatModal, { type MarkerContext } from "./MarkerChatModal";
-import BookingModal from "./BookingModal";
 
-import doctor1 from "@/assets/doctor-1.jpg";
 import { useLang } from "@/i18n/LanguageContext";
 import type { Lang } from "@/i18n/translations";
 import { postJson } from "@/lib/api";
@@ -29,9 +27,7 @@ interface LabRow {
   status: "normal" | "high" | "low" | "unknown";
   explanation?: string;
 }
-type ServiceId = "t2d-control" | "t2d-premium" | "t1d-pregnancy" | "gestational-diabetes" | "hypothyroid-pregnancy" | "nutrition";
 type ProgramId = "edu-t1d" | "edu-t2d" | "insulin-calc" | "weight-loss" | "pregnancy-nutrition";
-type DoctorId = "anna-sarkisian";
 
 interface Analysis {
   summary: string;
@@ -39,46 +35,8 @@ interface Analysis {
   insights: string[];
   recommendation: string;
   disclaimer: string;
-  recommendedServices?: ServiceId[];
   recommendedPrograms?: ProgramId[];
-  recommendedDoctors?: DoctorId[];
 }
-
-const doctorsCatalog: Record<DoctorId, { id: number; name: T; specialty: T; image: string }> = {
-  "anna-sarkisian": {
-    id: 1,
-    name: t("Anna Sarkisian", "Анна Саркисян", "Աննա Սարգսյան"),
-    specialty: t("Endocrinologist, PhD · 19+ years", "Эндокринолог, к.м.н. · 19+ лет", "Էնդոկրինոլոգ, բ.գ.թ. · 19+ տարի"),
-    image: doctor1,
-  },
-};
-
-const servicesCatalog: Record<ServiceId, { name: T; desc: T }> = {
-  "t2d-control": {
-    name: t("Type 2 Diabetes Control", "Контроль диабета 2 типа", "2-րդ տիպի շաքարախտի վերահսկում"),
-    desc: t("3-month program with consultations and therapy adjustment.", "3-месячная программа с консультациями и коррекцией терапии.", "3-ամսյա ծրագիր՝ խորհրդատվությամբ և բուժման ճշգրտմամբ:"),
-  },
-  "t2d-premium": {
-    name: t("Type 2 Diabetes — Premium", "Диабет 2 типа — Premium", "2-րդ տիպի շաքարախտ — Premium"),
-    desc: t("6-month premium program with deeper coaching.", "6-месячная премиум-программа с глубоким сопровождением.", "6-ամսյա պրեմիում ծրագիր՝ խորը ուղեկցմամբ:"),
-  },
-  "t1d-pregnancy": {
-    name: t("Type 1 Diabetes & Pregnancy", "Диабет 1 типа при беременности", "1-ին տիպի շաքարախտ և հղիություն"),
-    desc: t("Full pregnancy supervision with CGM and insulin adjustment.", "Полное сопровождение беременности с CGM и коррекцией инсулина.", "Հղիության ամբողջական ուղեկցում CGM-ով:"),
-  },
-  "gestational-diabetes": {
-    name: t("Gestational Diabetes", "Гестационный диабет", "Գեստացիոն շաքարախտ"),
-    desc: t("Personalized care plan with nutrition and glucose control.", "Индивидуальный план с контролем питания и глюкозы.", "Անհատական պլան՝ սննդի և գլյուկոզայի վերահսկմամբ:"),
-  },
-  "hypothyroid-pregnancy": {
-    name: t("Hypothyroidism & Pregnancy", "Гипотиреоз и беременность", "Հիպոթիրեոզ և հղիություն"),
-    desc: t("Thyroid monitoring and therapy adjustment by trimester.", "Мониторинг щитовидной железы и коррекция терапии.", "Վահանաձև գեղձի մոնիտորինգ և բուժման ճշգրտում:"),
-  },
-  "nutrition": {
-    name: t("Personalized Nutrition", "Персонализированная нутрициология", "Անհատականացված սննդաբանություն"),
-    desc: t("Custom meal plan and lifestyle coaching.", "Индивидуальный план питания и сопровождение.", "Անհատական սննդի պլան և ուղեկցում:"),
-  },
-};
 
 const programsCatalog: Record<ProgramId, { name: T; desc: T }> = {
   "edu-t1d": {
@@ -124,13 +82,9 @@ const copy = {
   insights: t("AI insights", "Анализ ИИ", "AI-ի վերլուծություն"),
   recommendation: t("Recommendation", "Рекомендация", "Առաջարկ"),
   disclaimer: t("Disclaimer", "Дисклеймер", "Հրաժարում"),
-  recServices: t("Recommended services for you", "Рекомендуемые услуги для вас", "Ձեզ համար առաջարկվող ծառայություններ"),
   recPrograms: t("Recommended educational programs", "Рекомендуемые обучающие программы", "Առաջարկվող ուսուցողական ծրագրեր"),
   recIntro: t("Based on your results, these may help:", "На основе ваших результатов могут помочь:", "Ձեր արդյունքների հիման վրա կարող են օգնել՝"),
-  viewService: t("View service", "Перейти к услуге", "Անցնել ծառայությանը"),
   viewProgram: t("View program", "Перейти к программе", "Անցնել ծրագրին"),
-  recDoctors: t("Recommended doctors", "Рекомендуемые врачи", "Առաջարկվող բժիշկներ"),
-  bookDoctor: t("Book consultation", "Записаться", "Գրանցվել"),
   normal: t("Normal", "Норма", "Նորմա"),
   high: t("High", "Высокий", "Բարձր"),
   low: t("Low", "Низкий", "Ցածր"),
@@ -287,13 +241,6 @@ const LabUploadModal = ({ open, onOpenChange }: Props) => {
   const filteredRows =
     analysis?.rows.filter((r) => statusFilter === "all" || (r.status ?? "unknown") === statusFilter) ?? [];
 
-  const goToService = (id: ServiceId) => {
-    onOpenChange(false);
-    setTimeout(() => {
-      document.getElementById("comprehensive-services")?.scrollIntoView({ behavior: "smooth" });
-    }, 250);
-  };
-
   const goToProgram = (id: ProgramId) => {
     if (id === "insulin-calc") {
       setInsulinModalOpen(true);
@@ -303,11 +250,6 @@ const LabUploadModal = ({ open, onOpenChange }: Props) => {
     setTimeout(() => {
       document.getElementById("educational-programs")?.scrollIntoView({ behavior: "smooth" });
     }, 250);
-  };
-
-  const [bookingDoctor, setBookingDoctor] = useState<DoctorId | null>(null);
-  const goToDoctor = (id: DoctorId) => {
-    setBookingDoctor(id);
   };
 
   return (
@@ -541,36 +483,6 @@ const LabUploadModal = ({ open, onOpenChange }: Props) => {
                 </span>
               </div>
 
-              {/* Recommended services */}
-              {analysis.recommendedServices && analysis.recommendedServices.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-semibold mb-1 flex items-center gap-2">
-                    <HeartPulse size={14} className="text-primary" /> {copy.recServices[lang]}
-                  </h4>
-                  <p className="text-xs text-muted-foreground mb-3">{copy.recIntro[lang]}</p>
-                  <div className="grid sm:grid-cols-2 gap-2.5">
-                    {analysis.recommendedServices.map((id) => {
-                      const item = servicesCatalog[id];
-                      if (!item) return null;
-                      return (
-                        <button
-                          key={id}
-                          onClick={() => goToService(id)}
-                          className="text-left p-3 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent hover:border-primary/50 hover:shadow-md transition-all group"
-                        >
-                          <div className="flex items-start justify-between gap-2 mb-1">
-                            <p className="text-sm font-semibold text-foreground leading-snug">{item.name[lang]}</p>
-                            <ArrowRight size={14} className="text-primary shrink-0 mt-0.5 transition-transform group-hover:translate-x-1" />
-                          </div>
-                          <p className="text-xs text-muted-foreground leading-relaxed">{item.desc[lang]}</p>
-                          <p className="text-[11px] font-semibold text-primary mt-2">{copy.viewService[lang]}</p>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
               {/* Recommended programs */}
               {analysis.recommendedPrograms && analysis.recommendedPrograms.length > 0 && (
                 <div>
@@ -601,39 +513,6 @@ const LabUploadModal = ({ open, onOpenChange }: Props) => {
                 </div>
               )}
 
-              {/* Recommended doctors */}
-              {analysis.recommendedDoctors && analysis.recommendedDoctors.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-semibold mb-1 flex items-center gap-2">
-                    <Stethoscope size={14} className="text-primary" /> {copy.recDoctors[lang]}
-                  </h4>
-                  <p className="text-xs text-muted-foreground mb-3">{copy.recIntro[lang]}</p>
-                  <div className="space-y-2.5">
-                    {analysis.recommendedDoctors.map((id) => {
-                      const doc = doctorsCatalog[id];
-                      if (!doc) return null;
-                      return (
-                        <button
-                          key={id}
-                          onClick={() => goToDoctor(id)}
-                          className="w-full text-left p-3 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent hover:border-primary/50 hover:shadow-md transition-all group flex items-center gap-3"
-                        >
-                          <img src={doc.image} alt={doc.name[lang]} className="w-12 h-12 rounded-full object-cover border border-border shrink-0" />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-foreground leading-snug">{doc.name[lang]}</p>
-                            <p className="text-xs text-muted-foreground leading-snug">{doc.specialty[lang]}</p>
-                          </div>
-                          <span className="text-[11px] font-semibold text-primary inline-flex items-center gap-1 shrink-0">
-                            {copy.bookDoctor[lang]}
-                            <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
               <Button onClick={reset} variant="outline" className="w-full">
                 <Upload size={14} /> {copy.newUpload[lang]}
               </Button>
@@ -648,13 +527,6 @@ const LabUploadModal = ({ open, onOpenChange }: Props) => {
         marker={chatMarker}
         summary={analysis?.summary}
       />
-      <BookingModal
-        open={bookingDoctor !== null}
-        onOpenChange={(o) => !o && setBookingDoctor(null)}
-        serviceTitle={bookingDoctor ? doctorsCatalog[bookingDoctor].name[lang] : ""}
-        serviceTitleI18n={bookingDoctor ? doctorsCatalog[bookingDoctor].name : undefined}
-      />
-
     </Dialog>
   );
 };

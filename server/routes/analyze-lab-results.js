@@ -28,13 +28,6 @@ const responseSchema = {
     insights: { type: "array", items: { type: "string" } },
     recommendation: { type: "string" },
     disclaimer: { type: "string" },
-    recommendedServices: {
-      type: "array",
-      items: {
-        type: "string",
-        enum: ["t2d-control", "t2d-premium", "t1d-pregnancy", "gestational-diabetes", "hypothyroid-pregnancy", "nutrition"],
-      },
-    },
     recommendedPrograms: {
       type: "array",
       items: {
@@ -42,12 +35,8 @@ const responseSchema = {
         enum: ["edu-t1d", "edu-t2d", "insulin-calc", "weight-loss", "pregnancy-nutrition"],
       },
     },
-    recommendedDoctors: {
-      type: "array",
-      items: { type: "string", enum: ["anna-sarkisian"] },
-    },
   },
-  required: ["summary", "rows", "insights", "recommendation", "disclaimer", "recommendedServices", "recommendedPrograms", "recommendedDoctors"],
+  required: ["summary", "rows", "insights", "recommendation", "disclaimer", "recommendedPrograms"],
 };
 
 const systemPrompt = (language) => `You are a medical assistant that helps patients understand their laboratory results.
@@ -60,16 +49,7 @@ Analyze the provided lab report (which may span multiple pages/images) and retur
 - insights: 1-3 short, actionable observations a patient can understand
 - recommendation: short suggestion (e.g., "consult a specialist", "recheck in X weeks")
 - disclaimer: a brief reminder that this is informational only
-- recommendedServices: array of IDs from the SERVICES CATALOG below that are most relevant to the patient's results (0-3 items, only if clearly relevant)
 - recommendedPrograms: array of IDs from the PROGRAMS CATALOG below that are most relevant (0-3 items, only if clearly relevant)
-
-SERVICES CATALOG (Insula clinic comprehensive services):
-- t2d-control: 3-month Type 2 Diabetes Control program — for elevated glucose/HbA1c suggesting type 2 diabetes or prediabetes.
-- t2d-premium: 6-month Premium Type 2 Diabetes program with deeper coaching — for poorly controlled type 2 diabetes or complex metabolic issues.
-- t1d-pregnancy: Type 1 Diabetes management during pregnancy — only if pregnancy + type 1 diabetes context.
-- gestational-diabetes: Gestational diabetes personalized support — only for pregnancy with elevated glucose.
-- hypothyroid-pregnancy: Hypothyroidism & pregnancy support — only if abnormal TSH/thyroid + pregnancy.
-- nutrition: Personalized nutrition program — for lipid issues, vitamin deficiencies, metabolic concerns, weight goals.
 
 PROGRAMS CATALOG (Insula educational programs):
 - edu-t1d: Education program for people with Type 1 Diabetes — for newly diagnosed or unmanaged T1D.
@@ -77,11 +57,6 @@ PROGRAMS CATALOG (Insula educational programs):
 - insulin-calc: Insulin Dose Calculation course — for insulin-using patients struggling with dosing.
 - weight-loss: Weight Loss & Metabolic Health program — for elevated lipids, glucose, or metabolic syndrome markers.
 - pregnancy-nutrition: Nutrition During Pregnancy program — for pregnancy-related findings.
-
-DOCTORS CATALOG (Insula clinic specialists):
-- anna-sarkisian: Endocrinologist, PhD, 19+ years. Type 1 & 2 diabetes, thyroid/parathyroid disorders, obesity, metabolic disorders, osteoporosis, pituitary disorders, pregnancy with endocrine conditions.
-
-Recommend doctors (recommendedDoctors, 1-2 IDs) whose specialty best matches the findings.
 
 Only recommend items clearly justified by the lab findings. Return empty arrays if nothing fits.
 Be cautious, factual, and never alarmist.`;
