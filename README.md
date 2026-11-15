@@ -51,17 +51,6 @@ npm run server      # run the backend (serve dist/ yourself, or point VITE_API_U
 If you deploy the frontend and backend on different hosts/ports, set `VITE_API_URL`
 in `.env` before building, so the frontend calls the right backend URL.
 
-## What changed from the original Lovable project
-
-- The two Supabase Edge Functions (`analyze-lab-results`, `explain-marker`) are now
-  plain Express routes in `server/routes/`, calling Gemini directly via
-  `@google/generative-ai` instead of the Lovable AI Gateway.
-- There is no Supabase project, no auth, and no database. The "Book consultation" flow
-  no longer requires signing in — it's a simple form that posts to `POST /api/bookings`,
-  which just logs the request server-side (swap in real persistence/notifications if
-  you need them later).
-- Telegram admin notifications were removed along with the Lovable connector they
-  depended on.
 
 ## Entry points
 - `src/pages/AILab.tsx` — page shell (logo, language switcher, footer)
